@@ -26,7 +26,12 @@ namespace Algorithm
         public Position Pos
         {
             get { return this.pos; }
-            set { this.pos = value; }
+            set
+            {
+                this.pos = value;
+                this.PosX = value.x;
+                this.PosY = value.y;
+            }
         }
 
         protected Figure(int posX, int posY)

@@ -19,6 +19,14 @@ namespace Algorithm
             }
         }
 
+        public bool HasFigures
+        {
+            get
+            {
+                return this.figures.Count > 0;
+            }
+        }
+
         public Cell(int posX, int posY)
         {
             this.posX = posX;

@@ -35,10 +35,10 @@ namespace Algorithm
             int commandsCount = int.Parse(line);
 
             String[] commands = new String[commandsCount];
-            
+
             for (int i = 0; i < commandsCount; i++)
             {
-                commands[i] = Console.ReadLine();   
+                commands[i] = Console.ReadLine();
             }
 
             return commands;
@@ -65,7 +65,7 @@ namespace Algorithm
 
                 posX = int.Parse(xPosString);
                 posY = int.Parse(yPosString);
-                
+
                 switch (createFigure)
                 {
                     case "ninetile":
@@ -92,13 +92,19 @@ namespace Algorithm
                     case "angle-ul":
                         figure = new UpLeftCorner(posX, posY);
                         break;
-                    
+
                     default:
                         throw new Exception("No such name of figure exists: " + createFigure);
                 }
 
                 engine.AddFigure(figure);
                 figures.Add(figure);
+                engine.Run();
+
+                foreach (var resultFigure in figures)
+                {
+                    Console.WriteLine(resultFigure.PosX + " " + resultFigure.PosY);
+                }
             }
         }
     }

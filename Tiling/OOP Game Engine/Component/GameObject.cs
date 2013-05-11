@@ -4,6 +4,6 @@
 
     public abstract class GameObject
     {
-        public virtual void Render(/*?*/);
+        public virtual void Render(){}//(/*?*/);
     }
 }

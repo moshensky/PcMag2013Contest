@@ -8,5 +8,7 @@
         {
             throw new NotImplementedException();
         }
+
+        public static void Main() { }
     }
 }
