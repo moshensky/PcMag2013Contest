@@ -7,7 +7,7 @@ namespace Algorithm
 {
     public class Figure : IEnumerable<Position>, ICloneable
     {
-
+        protected bool isOverlapped;
         protected Position[] figureOffset;
         private Position pos;
 
@@ -32,6 +32,12 @@ namespace Algorithm
                 this.PosX = value.x;
                 this.PosY = value.y;
             }
+        }
+
+        public bool IsOverlapped 
+        {
+            get { return this.isOverlapped; }
+            set { this.isOverlapped = value; } 
         }
 
         protected Figure(int posX, int posY)

@@ -13,11 +13,13 @@ namespace Algorithm
 
         private Cell[,] gameField;
         private List<Cell> cells;
+        private List<Figure> allFigures;
 
         public Engine()
         {
             gameField = new Cell[500, 500];
             cells = new List<Cell>();
+            allFigures = new List<Figure>();
         }
 
         public void AddFigure(Figure figure)
@@ -35,12 +37,9 @@ namespace Algorithm
                 }
                 (this.gameField[row, col]).Figures.Add(figure);
             }
+            allFigures.Add(figure);
         }
 
-        /// <summary>
-        /// Move the current figure to a new free place on the field
-        /// </summary>
-        /// <param name="figure">The figure to be moved.</param>
         public void MoveFigure(Figure figure)
         {
             Position newPosition = FindNewPlace(figure);
@@ -55,17 +54,24 @@ namespace Algorithm
             {
                 gameField[position.x, position.y].Figures.Remove(figure);
             }
-            //cells.First(x => x.Figures.Contains(figure)).Figures.Remove(figure);
+
+            for (int i = 0; i < cells.Count; i++)
+            {
+                if (cells[i].Figures.Contains(figure))
+                {
+                    cells[i].Figures.Remove(figure);
+                }
+            }
+
+            allFigures.Remove(figure);
         }
 
-        /// <summary>
-        /// Finding a new place for the figure using the flood fill algorithm
-        /// </summary>
-        /// <param name="figure">The current figure to be moved</param>
         private Position FindNewPlace(Figure figure)
         {
+            List<Position> visited = new List<Position>();
             Stack<Position> stack = new Stack<Position>();
             Position newFigurePosition = new Position();
+            Position returnPosition = new Position();
             int maxDistance = MaxFieldDistance;
             int currentDistance = 0;
 
@@ -81,46 +87,56 @@ namespace Algorithm
                     if (currentDistance < maxDistance)
                     {
                         maxDistance = currentDistance;
+                        returnPosition.x = newFigurePosition.x;
+                        returnPosition.y = newFigurePosition.y;
                     }
                 }
 
-                PushNodesToStack(ref stack, newFigurePosition, figure.Pos, maxDistance);
+                PushNodesToStack(ref stack, newFigurePosition, figure.Pos, maxDistance, visited);
             }
 
-            return newFigurePosition;
+            return returnPosition;
         }
 
         private static void PushNodesToStack(ref Stack<Position> stack, Position newFigurePosition,
-            Position startingPosition, int maxDistance)
+            Position startingPosition, int maxDistance, List<Position> visited)
         {
             int newPositionsDistance;
 
-            newPositionsDistance = CalculateDistance(startingPosition,
-                new Position(newFigurePosition.x - 1, newFigurePosition.y));
-            if (newFigurePosition.x - 2 > 0 && newPositionsDistance < maxDistance)
+            Position westNode = new Position(newFigurePosition.x - 1, newFigurePosition.y);
+            newPositionsDistance = CalculateDistance(startingPosition, westNode);
+            if ((westNode.x - 1 > 0) && (newPositionsDistance < maxDistance) &&
+                (!visited.Contains(westNode)))
             {
-                stack.Push(new Position(newFigurePosition.x - 1, newFigurePosition.y));
+                stack.Push(westNode);
+                visited.Add(westNode);
             }
 
-            newPositionsDistance = CalculateDistance(startingPosition,
-                new Position(newFigurePosition.x + 1, newFigurePosition.y));
-            if (newFigurePosition.x + 2 <= FieldDimension && newPositionsDistance < maxDistance)
+            Position eastNode = new Position(newFigurePosition.x + 1, newFigurePosition.y);
+            newPositionsDistance = CalculateDistance(startingPosition, eastNode);
+            if ((eastNode.x + 1 <= FieldDimension) && (newPositionsDistance < maxDistance) &&
+                (!visited.Contains(eastNode)))
             {
-                stack.Push(new Position(newFigurePosition.x + 1, newFigurePosition.y));
+                stack.Push(eastNode);
+                visited.Add(eastNode);
             }
 
-            newPositionsDistance = CalculateDistance(startingPosition,
-                new Position(newFigurePosition.x, newFigurePosition.y - 1));
-            if (newFigurePosition.y - 2 > 0 && newPositionsDistance < maxDistance)
+            Position northNode = new Position(newFigurePosition.x, newFigurePosition.y - 1);
+            newPositionsDistance = CalculateDistance(startingPosition, northNode);
+            if ((northNode.y - 1 > 0) && (newPositionsDistance < maxDistance) && 
+                (!visited.Contains(northNode)))
             {
                 stack.Push(new Position(newFigurePosition.x, newFigurePosition.y - 1));
+                visited.Add(northNode);
             }
 
-            newPositionsDistance = CalculateDistance(startingPosition,
-                new Position(newFigurePosition.x, newFigurePosition.y + 1));
-            if (newFigurePosition.y + 2 <= FieldDimension && newPositionsDistance < maxDistance)
+            Position southNode = new Position(newFigurePosition.x, newFigurePosition.y + 1);
+            newPositionsDistance = CalculateDistance(startingPosition, southNode);
+            if ((southNode.y + 1 <= FieldDimension) && (newPositionsDistance < maxDistance) &&
+                (!visited.Contains(southNode)))
             {
                 stack.Push(new Position(newFigurePosition.x, newFigurePosition.y + 1));
+                visited.Add(southNode);
             }
         }
 
@@ -136,11 +152,12 @@ namespace Algorithm
         {
             bool isFree = true;
             Figure newFigure = (Figure)figureToMove.Clone();
+            newFigure.Pos = newFigurePosition;
 
-            foreach (var position in figureToMove)
+            foreach (var position in newFigure)
             {
-                int row = newFigurePosition.x + (position.x - newFigurePosition.x);
-                int col = newFigurePosition.y + (position.y - newFigurePosition.y);
+                int row = newFigure.PosX;
+                int col = newFigure.PosY;
 
                 if (gameField[row, col] != null && gameField[row, col].HasFigures)
                 {
@@ -152,14 +169,47 @@ namespace Algorithm
             return isFree;
         }
 
+        public void SetFigureOverlapping(Figure figureToSet)
+        {
+            foreach (var figure in allFigures)
+            {
+                bool isOverlapped = CheckOverlapping(figureToSet, figure);
+                if (isOverlapped)
+                {
+                    figureToSet.IsOverlapped = true;
+                    break;
+                }
+            }
+        }
+
+        private bool CheckOverlapping(Figure firstFigure, Figure secondFigure)
+        {
+            bool isOverlapped = false;
+            foreach (var firstFigurePsition in firstFigure)
+            {
+                foreach (var secondFigurePosition in secondFigure)
+                {
+                    if ((firstFigurePsition.x == secondFigurePosition.x) &&
+                        (firstFigurePsition.y == secondFigurePosition.y))
+                    {
+                        isOverlapped = true;
+                        break;
+                    }
+                }
+            }
+
+            return isOverlapped;
+        }
+
         public virtual void Run()
         {
             // TODO: Implement the logic of the engine
-            for (int i = 0; i < cells.Count; i++)
+            for (int i = 0; i < allFigures.Count; i++)
             {
-                for (int j = 0; j < cells[i].Figures.Count; j++)
+                if (allFigures[i].IsOverlapped)
                 {
-                    MoveFigure(cells[i].Figures[j]);
+                    this.MoveFigure(allFigures[i]);
+                    allFigures[i].IsOverlapped = false;
                 }
             }
         }

@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Timers;
 
 namespace Algorithm
 {
@@ -10,22 +12,31 @@ namespace Algorithm
     {
         public static void Main(String[] args)
         {
+            
 
             TilesMain game = new TilesMain();
             Engine engine = new Engine();
             List<Figure> figures = new List<Figure>();
             String[] input = game.ReadInput();
+
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
+
             game.CreateFigures(input, engine, figures);
 
-            /*
-            Figure plus = new Plus(new Position(5, 5));
-            foreach (var position in plus)
+            engine.Run();
+            PrintResult(figures);
+
+            stopwatch.Stop();
+            Console.WriteLine(stopwatch.Elapsed);
+        }
+
+        private static void PrintResult(List<Figure> figures)
+        {
+            foreach (var resultFigure in figures)
             {
-                Console.WriteLine(position.x + " " + position.y);
+                Console.WriteLine(resultFigure.PosX + " " + resultFigure.PosY);
             }
-             */
-
-
         }
 
         private String[] ReadInput()
@@ -99,12 +110,11 @@ namespace Algorithm
 
                 engine.AddFigure(figure);
                 figures.Add(figure);
-                engine.Run();
+            }
 
-                foreach (var resultFigure in figures)
-                {
-                    Console.WriteLine(resultFigure.PosX + " " + resultFigure.PosY);
-                }
+            for (int i = 0; i < figures.Count; i++ )
+            {
+                engine.SetFigureOverlapping(figures[i]);
             }
         }
     }
