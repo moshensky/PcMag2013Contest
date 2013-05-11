@@ -12,13 +12,11 @@ namespace Algorithm
         public const int FieldDimension = 500;
 
         private Cell[,] gameField;
-        private List<Cell> cells;
         private List<Figure> allFigures;
 
         public Engine()
         {
             gameField = new Cell[500, 500];
-            cells = new List<Cell>();
             allFigures = new List<Figure>();
         }
 
@@ -33,7 +31,6 @@ namespace Algorithm
                 {
                     Cell cell = new Cell(row, col);
                     gameField[row, col] = cell;
-                    this.cells.Add(cell);
                 }
                 (this.gameField[row, col]).Figures.Add(figure);
             }
@@ -53,14 +50,6 @@ namespace Algorithm
             foreach (var position in figure)
             {
                 gameField[position.x, position.y].Figures.Remove(figure);
-            }
-
-            for (int i = 0; i < cells.Count; i++)
-            {
-                if (cells[i].Figures.Contains(figure))
-                {
-                    cells[i].Figures.Remove(figure);
-                }
             }
 
             allFigures.Remove(figure);
@@ -173,12 +162,15 @@ namespace Algorithm
         {
             foreach (var figure in allFigures)
             {
-                bool isOverlapped = CheckOverlapping(figureToSet, figure);
-                if (isOverlapped)
+                if ((figure != figureToSet))
                 {
-                    figureToSet.IsOverlapped = true;
-                    break;
-                }
+                    bool isOverlapped = CheckOverlapping(figureToSet, figure);
+                    if (isOverlapped)
+                    {
+                        figureToSet.IsOverlapped = true;
+                        break;
+                    }
+                }   
             }
         }
 
@@ -208,7 +200,11 @@ namespace Algorithm
             {
                 if (allFigures[i].IsOverlapped)
                 {
-                    this.MoveFigure(allFigures[i]);
+                    this.SetFigureOverlapping(allFigures[i]);
+                    if (allFigures[i].IsOverlapped)
+                    {
+                        this.MoveFigure(allFigures[i]);
+                    }
                     allFigures[i].IsOverlapped = false;
                 }
             }
