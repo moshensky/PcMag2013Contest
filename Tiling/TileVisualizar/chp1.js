@@ -47,7 +47,10 @@
     context.arc(200, 300, 25, 0, 3 / 2 * Math.PI, false); //(3/2*PI radians = 270 degrees) context.stroke();
 
     // Get a handle to the image object
-    var image = document.getElementById('spaceship');
+    var image = new Image();
+    image.src = 'spaceship.png';
+    image.onload = function () {
+    }
     // Draw the image at (0,350)
     context.drawImage(image, 0, 350);
     // Scaling the image to half the original size
@@ -72,5 +75,28 @@
     //Restore to original state by rotating and translating back
     context.rotate(-3*Math.PI/4);
     context.translate(-300, -370);
+
+    
+    // Image Loader
+    var imageLoader = {
+        loaded: true,
+        loadedImages: 0,
+        totalImages: 0,
+        load: function (url) {
+            this.totalImages++;
+            this.loaded = false;
+            var image = new Image();
+            image.src = url;
+            image.onload = function () {
+                imageLoader.loadedImages++;
+                if (imageLoader.loadedImages === imageLoader.totalImages) {
+                    imageLoader.loaded = true;
+                }
+            }
+            return image;
+        }
+    };
+
+
 
 }
