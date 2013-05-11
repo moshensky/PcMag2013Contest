@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Algorithm", "Algorithm\Algorithm.csproj", "{44F41971-46D2-401E-A419-393C2F314B9A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TileVisualizar", "TileVisualizar\TileVisualizar.csproj", "{367F0857-0F49-48AB-ACD2-C349546ED776}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OOP Game Engine", "OOP Game Engine\OOP Game Engine.csproj", "{AAE05417-1FFA-4288-A151-A04CA86A5FB6}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{44F41971-46D2-401E-A419-393C2F314B9A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{44F41971-46D2-401E-A419-393C2F314B9A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{44F41971-46D2-401E-A419-393C2F314B9A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{44F41971-46D2-401E-A419-393C2F314B9A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{367F0857-0F49-48AB-ACD2-C349546ED776}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{367F0857-0F49-48AB-ACD2-C349546ED776}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{367F0857-0F49-48AB-ACD2-C349546ED776}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{367F0857-0F49-48AB-ACD2-C349546ED776}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AAE05417-1FFA-4288-A151-A04CA86A5FB6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AAE05417-1FFA-4288-A151-A04CA86A5FB6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AAE05417-1FFA-4288-A151-A04CA86A5FB6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AAE05417-1FFA-4288-A151-A04CA86A5FB6}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
