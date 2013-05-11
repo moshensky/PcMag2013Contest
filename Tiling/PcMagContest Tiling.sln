@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TileVisualizar", "TileVisua
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OOP Game Engine", "OOP Game Engine\OOP Game Engine.csproj", "{AAE05417-1FFA-4288-A151-A04CA86A5FB6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fruits War", "Fruits War\Fruits War.csproj", "{0EE7212B-3228-4F57-8A05-30890B722B6C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -25,6 +27,10 @@ Global
 		{AAE05417-1FFA-4288-A151-A04CA86A5FB6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AAE05417-1FFA-4288-A151-A04CA86A5FB6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AAE05417-1FFA-4288-A151-A04CA86A5FB6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0EE7212B-3228-4F57-8A05-30890B722B6C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0EE7212B-3228-4F57-8A05-30890B722B6C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0EE7212B-3228-4F57-8A05-30890B722B6C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0EE7212B-3228-4F57-8A05-30890B722B6C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

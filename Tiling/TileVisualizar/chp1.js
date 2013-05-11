@@ -96,6 +96,23 @@
             return image;
         }
     };
+    
+
+    function animationLoop() {
+        // Iterate through all the items in the game
+        //And move them
+    }
+
+    function drawingLoop() {
+        //1. call the drawingLoop method once after 20 milliseconds
+        var gameLoop = setTimeout(drawingLoop, 20);
+        //2. Clear the canvas
+        //3. Iterate through all the items
+        //4. And draw them
+    }
+
+    // Stop calling drawingLoop() and clear the gameLoop variable
+    clearTimeout(gameLoop);
 
 
 
