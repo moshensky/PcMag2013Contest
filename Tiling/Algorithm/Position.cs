@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Algorithm
 {
-    public struct Position
+    public struct Position : IComparable<Position>
     {
         public int x;
         public int y;
@@ -15,6 +15,33 @@ namespace Algorithm
         {
             this.x = x;
             this.y = y;
+        }
+
+        public int CompareTo(Position other)
+        {
+            if (this.x > other.x)
+            {
+                return 1;
+            }
+            else if (this.x < other.x)
+            {
+                return -1;
+            }
+            else
+            {
+                if (this.y > other.y)
+                {
+                    return 1;
+                }
+                else if (this.y < other.y)
+                {
+                    return -1;
+                }
+                else
+                {
+                    return 0;
+                }
+            }
         }
     }
 }

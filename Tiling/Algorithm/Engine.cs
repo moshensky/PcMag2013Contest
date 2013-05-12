@@ -20,7 +20,7 @@ namespace Algorithm
             allFigures = new List<Figure>();
         }
 
-        public void AddFigure(Figure figure)
+        public void AddFigure(Figure figure, bool addToList = true)
         {
             foreach (var position in figure)
             {
@@ -34,7 +34,11 @@ namespace Algorithm
                 }
                 (this.gameField[row, col]).Figures.Add(figure);
             }
-            allFigures.Add(figure);
+
+            if (addToList)
+            {
+                allFigures.Add(figure);
+            }
         }
 
         public void MoveFigure(Figure figure)
@@ -42,7 +46,7 @@ namespace Algorithm
             Position newPosition = FindNewPlace(figure);
             this.RemoveFigure(figure);
             figure.Pos = newPosition;
-            this.AddFigure(figure);
+            this.AddFigure(figure, false);
         }
 
         private void RemoveFigure(Figure figure)
@@ -51,13 +55,12 @@ namespace Algorithm
             {
                 gameField[position.x, position.y].Figures.Remove(figure);
             }
-
-            allFigures.Remove(figure);
         }
 
+        // Find a new place for the figure using flood fill algorithm
         private Position FindNewPlace(Figure figure)
         {
-            List<Position> visited = new List<Position>();
+            SortedSet<Position> visited = new SortedSet<Position>();
             Stack<Position> stack = new Stack<Position>();
             Position newFigurePosition = new Position();
             Position returnPosition = new Position();
@@ -81,14 +84,14 @@ namespace Algorithm
                     }
                 }
 
-                PushNodesToStack(ref stack, newFigurePosition, figure.Pos, maxDistance, visited);
+                PushNodesToStack(stack, newFigurePosition, figure.Pos, maxDistance, visited);
             }
 
             return returnPosition;
         }
 
-        private static void PushNodesToStack(ref Stack<Position> stack, Position newFigurePosition,
-            Position startingPosition, int maxDistance, List<Position> visited)
+        private void PushNodesToStack(Stack<Position> stack, Position newFigurePosition,
+            Position startingPosition, int maxDistance, SortedSet<Position> visited)
         {
             int newPositionsDistance;
 
@@ -103,7 +106,7 @@ namespace Algorithm
 
             Position eastNode = new Position(newFigurePosition.x + 1, newFigurePosition.y);
             newPositionsDistance = CalculateDistance(startingPosition, eastNode);
-            if ((eastNode.x + 1 <= FieldDimension) && (newPositionsDistance < maxDistance) &&
+            if ((eastNode.x + 1 < FieldDimension) && (newPositionsDistance < maxDistance) &&
                 (!visited.Contains(eastNode)))
             {
                 stack.Push(eastNode);
@@ -112,7 +115,7 @@ namespace Algorithm
 
             Position northNode = new Position(newFigurePosition.x, newFigurePosition.y - 1);
             newPositionsDistance = CalculateDistance(startingPosition, northNode);
-            if ((northNode.y - 1 > 0) && (newPositionsDistance < maxDistance) && 
+            if ((northNode.y - 1 > 0) && (newPositionsDistance < maxDistance) &&
                 (!visited.Contains(northNode)))
             {
                 stack.Push(new Position(newFigurePosition.x, newFigurePosition.y - 1));
@@ -121,7 +124,7 @@ namespace Algorithm
 
             Position southNode = new Position(newFigurePosition.x, newFigurePosition.y + 1);
             newPositionsDistance = CalculateDistance(startingPosition, southNode);
-            if ((southNode.y + 1 <= FieldDimension) && (newPositionsDistance < maxDistance) &&
+            if ((southNode.y + 1 < FieldDimension) && (newPositionsDistance < maxDistance) &&
                 (!visited.Contains(southNode)))
             {
                 stack.Push(new Position(newFigurePosition.x, newFigurePosition.y + 1));
@@ -145,8 +148,8 @@ namespace Algorithm
 
             foreach (var position in newFigure)
             {
-                int row = newFigure.PosX;
-                int col = newFigure.PosY;
+                int row = position.x;
+                int col = position.y;
 
                 if (gameField[row, col] != null && gameField[row, col].HasFigures)
                 {
@@ -158,35 +161,14 @@ namespace Algorithm
             return isFree;
         }
 
-        public void SetFigureOverlapping(Figure figureToSet)
-        {
-            foreach (var figure in allFigures)
-            {
-                if ((figure != figureToSet))
-                {
-                    bool isOverlapped = CheckOverlapping(figureToSet, figure);
-                    if (isOverlapped)
-                    {
-                        figureToSet.IsOverlapped = true;
-                        break;
-                    }
-                }   
-            }
-        }
-
-        private bool CheckOverlapping(Figure firstFigure, Figure secondFigure)
+        private bool CheckOverlapping(Figure figureToCheck)
         {
             bool isOverlapped = false;
-            foreach (var firstFigurePsition in firstFigure)
+            foreach (var position in figureToCheck)
             {
-                foreach (var secondFigurePosition in secondFigure)
+                if (gameField[position.x, position.y].Figures.Count > 1)
                 {
-                    if ((firstFigurePsition.x == secondFigurePosition.x) &&
-                        (firstFigurePsition.y == secondFigurePosition.y))
-                    {
-                        isOverlapped = true;
-                        break;
-                    }
+                    isOverlapped = true;
                 }
             }
 
@@ -195,17 +177,11 @@ namespace Algorithm
 
         public virtual void Run()
         {
-            // TODO: Implement the logic of the engine
             for (int i = 0; i < allFigures.Count; i++)
             {
-                if (allFigures[i].IsOverlapped)
+                if (CheckOverlapping(allFigures[i]))
                 {
-                    this.SetFigureOverlapping(allFigures[i]);
-                    if (allFigures[i].IsOverlapped)
-                    {
-                        this.MoveFigure(allFigures[i]);
-                    }
-                    allFigures[i].IsOverlapped = false;
+                    this.MoveFigure(allFigures[i]);
                 }
             }
         }

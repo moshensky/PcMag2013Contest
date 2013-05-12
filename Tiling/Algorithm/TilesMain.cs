@@ -12,31 +12,27 @@ namespace Algorithm
     {
         public static void Main(String[] args)
         {
-            
-
             TilesMain game = new TilesMain();
             Engine engine = new Engine();
             List<Figure> figures = new List<Figure>();
             String[] input = game.ReadInput();
 
-            Stopwatch stopwatch = new Stopwatch();
-            stopwatch.Start();
-
             game.CreateFigures(input, engine, figures);
-
             engine.Run();
             PrintResult(figures);
-
-            stopwatch.Stop();
-            Console.WriteLine(stopwatch.Elapsed);
         }
 
         private static void PrintResult(List<Figure> figures)
         {
+            StringBuilder result = new StringBuilder(10000);
+
             foreach (var resultFigure in figures)
             {
-                Console.WriteLine(resultFigure.PosX + " " + resultFigure.PosY);
+                result.Append(resultFigure.PosX + " " + resultFigure.PosY + "\n");
             }
+
+            result.Remove(result.Length - 1, 1);
+            Console.WriteLine(result.ToString());
         }
 
         private String[] ReadInput()
@@ -110,11 +106,6 @@ namespace Algorithm
 
                 engine.AddFigure(figure);
                 figures.Add(figure);
-            }
-
-            for (int i = 0; i < figures.Count; i++ )
-            {
-                engine.SetFigureOverlapping(figures[i]);
             }
         }
     }
